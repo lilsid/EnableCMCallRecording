@@ -15,27 +15,14 @@ public class EnableCallRecording implements IXposedHookLoadPackage,
 	public static final String CALL_RECORDING_SERVICE = "com.android.services.callrecorder.CallRecorderService";
 
 	@Override
-	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
-		if (!DIALER.equals(lpparam.packageName)) {
-			return;
-		}
-		findAndHookMethod(CALL_RECORDING_SERVICE, lpparam.classLoader,
-				"isEnabled", Context.class,
-				XC_MethodReplacement.returnConstant(true));
-		findAndHookMethod(CALL_RECORDING_SERVICE, lpparam.classLoader,
-				"getAudioSource",
-				XC_MethodReplacement
-						.returnConstant(MediaRecorder.AudioSource.VOICE_CALL));
-	}
-
-	@Override
 	public void handleInitPackageResources(InitPackageResourcesParam resparam)
 			throws Throwable {
 		if (!DIALER.equals(resparam.packageName)) {
 			return;
 		}
-		resparam.res.setReplacement(DIALER, "bool", "call_recording_enabled",
-				true);
-	}
+		resparam.res.setReplacement(DIALER, "integer", "call_recording_audio_source",
+                		4);
+				
+			}
 
 }
